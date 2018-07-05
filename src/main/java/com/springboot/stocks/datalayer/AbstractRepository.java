@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public class AbstractRepository {
+public abstract class AbstractRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
