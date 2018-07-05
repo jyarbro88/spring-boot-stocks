@@ -20,14 +20,16 @@ import java.util.stream.Collectors;
 @RestController
 public class StockController {
 
-    @Autowired
-    private StockBeanMapper stockBeanMapper;
+    private final StockBeanMapper stockBeanMapper;
+    private final StockRepository stockRepository;
+    private final StockDAOMapper stockDAOMapper;
 
     @Autowired
-    private StockRepository stockRepository;
-
-    @Autowired
-    private StockDAOMapper stockDAOMapper;
+    public StockController(StockBeanMapper stockBeanMapper, StockRepository stockRepository, StockDAOMapper stockDAOMapper) {
+        this.stockBeanMapper = stockBeanMapper;
+        this.stockRepository = stockRepository;
+        this.stockDAOMapper = stockDAOMapper;
+    }
 
     @RequestMapping(
             value = "/stocks",

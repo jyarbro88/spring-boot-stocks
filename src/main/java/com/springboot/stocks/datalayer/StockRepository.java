@@ -8,7 +8,7 @@ import java.util.List;
 @Repository
 public class StockRepository extends AbstractRepository {
 
-    private void checkForSuffienctSearchCriteria(final StockDAO stockDAO) {
+    private void checkForSufficientSearchCriteria(final StockDAO stockDAO) {
         if (stockDAO.getSymbol() == null &&
                 stockDAO.getPrice() == null &&
                 stockDAO.getVolume() == null &&
@@ -28,7 +28,7 @@ public class StockRepository extends AbstractRepository {
     }
 
     public List<StockDAO> findAllBy(StockDAO stockDAO) {
-        checkForSuffienctSearchCriteria(stockDAO);
+        checkForSufficientSearchCriteria(stockDAO);
 
         TypedQuery<StockDAO> query = getEntityManager().createQuery(buildSqlQuery(StockDAO.class, stockDAO), StockDAO.class);
         addQueryParams(stockDAO, query);

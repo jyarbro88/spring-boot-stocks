@@ -1,9 +1,6 @@
 package com.springboot.stocks.datalayer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityResult;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
