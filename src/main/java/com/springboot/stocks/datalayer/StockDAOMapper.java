@@ -3,6 +3,8 @@ package com.springboot.stocks.datalayer;
 import com.springboot.stocks.weblayer.beans.StockBean;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+
 @Component
 public class StockDAOMapper {
 
@@ -13,7 +15,9 @@ public class StockDAOMapper {
         return stockDAO;
     }
 
-    private void updateDAO(StockBean stockBean, StockDAO stockDAO) {
+    public void updateDAO(StockBean stockBean, StockDAO stockDAO) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
         if (stockBean.getSymbol() != null) {
             stockDAO.setSymbol(stockBean.getSymbol());
