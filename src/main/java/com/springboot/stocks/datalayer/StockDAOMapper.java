@@ -6,26 +6,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class StockDAOMapper {
 
-    public StockDAO toDAO(StockBean stockBean) {
-        StockDAO stockDAO = new StockDAO();
+    public stock_quotes toDAO(StockBean stockBean) {
+        stock_quotes stockDAO = new stock_quotes();
         updateDAO(stockBean, stockDAO);
 
         return stockDAO;
     }
 
-    public void updateDAO(StockBean stockBean, StockDAO stockDAO) {
+    public void updateDAO(StockBean stockBean, stock_quotes stockDAOs) {
 
         if (stockBean.getSymbol() != null) {
-            stockDAO.setSymbol(stockBean.getSymbol());
+            stockDAOs.setSymbol(stockBean.getSymbol());
         }
         if (stockBean.getPrice() != null) {
-            stockDAO.setPrice(stockBean.getPrice());
+            stockDAOs.setPrice(stockBean.getPrice());
         }
         if (stockBean.getVolume() != null) {
-            stockDAO.setVolume(stockBean.getVolume());
+            stockDAOs.setVolume(stockBean.getVolume());
         }
         if (stockBean.getDate() != null) {
-            stockDAO.setDate(stockBean.getDate());
+            stockDAOs.setDate(stockBean.getDate());
         }
     }
 }
