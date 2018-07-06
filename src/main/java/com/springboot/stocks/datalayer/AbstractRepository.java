@@ -11,12 +11,8 @@ public abstract class AbstractRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public EntityManager getEntityManager() {
+    EntityManager getEntityManager() {
         return entityManager;
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 
     @Transactional

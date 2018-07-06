@@ -28,7 +28,8 @@ public class stock_quotes {
         this.date = date;
     }
 
-    public stock_quotes(String symbol) {
+    public stock_quotes(String symbol, Date date) {
+        this.date = date;
         this.symbol = symbol;
     }
 

@@ -1,12 +1,13 @@
 package com.springboot.stocks.weblayer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.stocks.datalayer.StockDAO;
+import com.springboot.stocks.datalayer.stock_quotes;
 import com.springboot.stocks.datalayer.StockDAOMapper;
 import com.springboot.stocks.datalayer.StockRepository;
 import com.springboot.stocks.weblayer.beans.StockBean;
 import com.springboot.stocks.weblayer.beans.StockBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,26 @@ public class StockController {
     }
 
     @RequestMapping(
+            value = "/summarized-data",
+            produces = "application/json",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public List getSummarizedStock(
+            @RequestParam(value = "symbol", required = true) String symbol,
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            @RequestParam(value = "date", required = true) Date date
+    ) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        return stockRepository.findBySymbolAndDate(symbol, date);
+
+//        return bySymbol.stream().map(stockBeanMapper::toBean).collect(Collectors.toList());
+    }
+
+
+    @RequestMapping(
             value = "/stocks",
             produces = "application/json",
             method = RequestMethod.GET
@@ -43,16 +64,16 @@ public class StockController {
             @RequestParam(value = "volume", required = false) Integer volume,
             @RequestParam(value = "date", required = false) Date date
     ) {
-        List<StockDAO> stockDAOS;
+        List<stock_quotes> stockDAOs;
 
         if (symbol != null || price != null || volume != null || date != null) {
-            StockDAO stockDAOToSearchFor = new StockDAO(symbol, price, volume, date);
-            stockDAOS = stockRepository.findAllBy(stockDAOToSearchFor);
+            stock_quotes stockToSearchFor = new stock_quotes(symbol, price, volume, date);
+            stockDAOs = stockRepository.findAllBy(stockToSearchFor);
         } else {
-            stockDAOS = stockRepository.list();
+            stockDAOs = stockRepository.list();
         }
 
-        return stockDAOS.stream().map(stockBeanMapper::toBean).collect(Collectors.toList());
+        return stockDAOs.stream().map(stockBeanMapper::toBean).collect(Collectors.toList());
     }
 
     @RequestMapping(
@@ -73,8 +94,8 @@ public class StockController {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        StockDAO stockDAO = stockDAOMapper.toDAO(stockBean);
-        stockRepository.persist(stockDAO);
+        stock_quotes StockDAO = stockDAOMapper.toDAO(stockBean);
+        stockRepository.persist(StockDAO);
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -90,7 +111,7 @@ public class StockController {
             @PathVariable(value = "stockId") Long stockId
     ) {
         // Fetch the original data from the database for given ID
-        StockDAO foundStockDAO = stockRepository.find(StockDAO.class, stockId);
+        stock_quotes foundStock = stockRepository.find(stock_quotes.class, stockId);
 
         // Marshall the JSON String to a Java Bean
         ObjectMapper mapper = new ObjectMapper();
@@ -103,10 +124,10 @@ public class StockController {
         }
 
         // Update the found DAO with changed values in StockBean
-        stockDAOMapper.updateDAO(stockBean, foundStockDAO);
+        stockDAOMapper.updateDAO(stockBean, foundStock);
 
         try {
-            stockRepository.merge(foundStockDAO);
+            stockRepository.merge(foundStock);
             return new ResponseEntity(HttpStatus.OK);
         } catch(IllegalArgumentException e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -123,14 +144,14 @@ public class StockController {
     public ResponseEntity deleteStock(
             @PathVariable(value = "stockId") Long stockId
     ){
-        StockDAO foundStockDAO = stockRepository.find(StockDAO.class, stockId);
+        stock_quotes foundStock = stockRepository.find(stock_quotes.class, stockId);
 
-        if (foundStockDAO == null) {
+        if (foundStock == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         try {
-            stockRepository.remove(foundStockDAO);
+            stockRepository.remove(foundStock);
             return new ResponseEntity(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
