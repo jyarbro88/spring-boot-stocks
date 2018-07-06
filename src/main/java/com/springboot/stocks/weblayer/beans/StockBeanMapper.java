@@ -1,12 +1,12 @@
 package com.springboot.stocks.weblayer.beans;
 
-import com.springboot.stocks.datalayer.StockDAO;
+import com.springboot.stocks.datalayer.stock_quotes;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StockBeanMapper {
 
-    public StockBean toBean(StockDAO stockDAO) {
+    public StockBean toBean(stock_quotes stockDAO) {
         StockBean stockBean = new StockBean();
 
         stockBean.setId(stockDAO.getId());
