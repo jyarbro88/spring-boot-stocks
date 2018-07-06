@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "stock_quotes")
-public class StockDAO {
+public class stock_quotes {
 
     @Id
     @GeneratedValue
@@ -19,13 +19,17 @@ public class StockDAO {
     @Column(name = "date")
     private Date date;
 
-    public StockDAO() { }
+    public stock_quotes() { }
 
-    public StockDAO(String symbol, Double price, Integer volume, Date date) {
+    public stock_quotes(String symbol, Double price, Integer volume, Date date) {
         this.symbol = symbol;
         this.price = price;
         this.volume = volume;
         this.date = date;
+    }
+
+    public stock_quotes(String symbol) {
+        this.symbol = symbol;
     }
 
     public Long getId() {
