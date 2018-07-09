@@ -33,20 +33,24 @@ public class StockController {
     }
 
     @RequestMapping(
-            value = "/summarized-data",
+            value = "/summarized-data/{symbol}/{date}",
             produces = "application/json",
             method = RequestMethod.GET
     )
     @ResponseBody
     public List getSummarizedStock(
-            @RequestParam(value = "symbol", required = true) String symbol,
+            @PathVariable(value = "symbol") String symbol,
             @DateTimeFormat(pattern = "yyyy-MM-dd")
-            @RequestParam(value = "date", required = true) Date date
+            @PathVariable(value = "date") Date date
     ) {
 
-        ObjectMapper mapper = new ObjectMapper();
+        List<stock_quotes> stockDAOs;
 
-        return stockRepository.findBySymbolAndDate(symbol, date);
+        stock_quotes stockToSearchFor = new stock_quotes(symbol, date);
+
+        stockDAOs = stockRepository.findBySymbolAndDate(symbol, date, stockToSearchFor);
+
+        return stockDAOs.stream().map(stockBeanMapper::toBean).collect(Collectors.toList());
 
 //        return bySymbol.stream().map(stockBeanMapper::toBean).collect(Collectors.toList());
     }

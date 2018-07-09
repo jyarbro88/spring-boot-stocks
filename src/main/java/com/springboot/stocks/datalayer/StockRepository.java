@@ -19,17 +19,18 @@ public class StockRepository extends AbstractRepository {
         return query.getResultList();
     }
 
-    public List findBySymbolAndDate(String stockSymbol, Date date) {
-        Query query = getEntityManager().createQuery(buildFindQuery());
+    public List<stock_quotes> findBySymbolAndDate(String stockSymbol, Date date, stock_quotes stockToSearchFor) {
+        Query query = getEntityManager().createQuery(buildSummarizeQuery(stock_quotes.class, stockToSearchFor), stock_quotes.class);
         query.setParameter("symbol", stockSymbol);
         query.setParameter("date", date);
         return query.getResultList();
     }
 
-    private <T> String buildFindQuery() {
+    private <T> String buildSummarizeQuery(final Class<T> tClass, final stock_quotes stockToSearchFor) {
 
-        return "SELECT MIN(price), MAX(price), SUM(volume) FROM stock_quotes WHERE symbol = :symbol AND date = :date";
+        return "SELECT MIN(price), MAX(price) FROM " + tClass.getName() + " WHERE symbol = :symbol AND date = :date";
     }
+
 
     private <T> String buildSqlQuery(final Class<T> tClass, final stock_quotes stockDAO) {
         String sql = "SELECT t FROM " + tClass.getName() + " t WHERE";
