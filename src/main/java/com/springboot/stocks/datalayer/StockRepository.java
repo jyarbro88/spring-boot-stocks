@@ -3,7 +3,6 @@ package com.springboot.stocks.datalayer;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -18,19 +17,6 @@ public class StockRepository extends AbstractRepository {
         addQueryParams(stockDAO, query);
         return query.getResultList();
     }
-
-    public List<stock_quotes> findBySymbolAndDate(String stockSymbol, Date date, stock_quotes stockToSearchFor) {
-        Query query = getEntityManager().createQuery(buildSummarizeQuery(stock_quotes.class, stockToSearchFor), stock_quotes.class);
-        query.setParameter("symbol", stockSymbol);
-        query.setParameter("date", date);
-        return query.getResultList();
-    }
-
-    private <T> String buildSummarizeQuery(final Class<T> tClass, final stock_quotes stockToSearchFor) {
-
-        return "SELECT MIN(price), MAX(price) FROM " + tClass.getName() + " WHERE symbol = :symbol AND date = :date";
-    }
-
 
     private <T> String buildSqlQuery(final Class<T> tClass, final stock_quotes stockDAO) {
         String sql = "SELECT t FROM " + tClass.getName() + " t WHERE";
@@ -50,7 +36,6 @@ public class StockRepository extends AbstractRepository {
         sql = sql.substring(0, sql.length() - 4);
         return sql;
     }
-
 
     private <T> void addQueryParams(final stock_quotes stockDAO, final TypedQuery<T> query) {
         if (stockDAO.getSymbol() != null) {
